@@ -1,0 +1,67 @@
+import org.junit.Assert;
+import org.junit.Test;
+import org.openqa.selenium.By;
+
+import static java.lang.String.valueOf;
+
+public class New {
+
+    @Test
+    public void WithdrawlN_Test() throws InterruptedException {
+        // Phase 1 Selectors
+        String url = "https://www.globalsqa.com/angularJs-protractor/BankingProject/#/login";
+        String customerLoginSelector = "body > div > div > div.ng-scope > div > div.borderM.box.padT20 > div:nth-child(1) > button";
+        String customerSelectSelector = "#userSelect";
+        String HarryPotterSelector = "#userSelect > option:nth-child(3)";
+        String LoginSelector = "body > div > div > div.ng-scope > div > form > button";
+
+        // Phase 2 Selectors
+        String withdrawlSelector = "body > div > div > div.ng-scope > div > div:nth-child(5) > button:nth-child(3)";
+        String amountBoxSelector = "body > div > div > div.ng-scope > div > div.container-fluid.mainBox.ng-scope > div > form > div > input";
+        String submitSelector = "body > div > div > div.ng-scope > div > div.container-fluid.mainBox.ng-scope > div > form > button";
+        String errorMessageSelector = "body > div > div > div.ng-scope > div > div.container-fluid.mainBox.ng-scope > div > span";
+
+        // Input
+        String balanceSelector = Selenium1.driver.findElement(By.xpath("/html/body/div/div/div[2]/div/div[2]/strong[2]")).getText();
+        String balanceInt = valueOf(Integer.parseInt(balanceSelector));
+        int withdrawalAmount = Integer.parseInt(balanceInt + 100);
+        //Balance
+        //String balanceSelector= Selenium1.driver.findElement(By.xpath("/html/body/div/div/div[2]/div/div[2]/strong[2]")).getText();
+        // int balanceInt = Integer.parseInt(balanceSelector);
+        //int withdrawalAmount= balanceInt+100;
+
+        // Variable
+        String expectedError = "Transaction Failed. You can not withdraw amount more than the balance.";
+
+        // Selenium
+        Selenium1 selenium1 = new Selenium1();
+        Selenium1.driver.get(url);
+
+        // Open Window- Phase 1
+        Thread.sleep(1000);
+        selenium1.getElement(customerLoginSelector).click();
+        Thread.sleep(1000);
+        selenium1.getElement(customerSelectSelector).click();
+        Thread.sleep(1000);
+        selenium1.getElement(HarryPotterSelector).click();
+        Thread.sleep(1000);
+        selenium1.getElement(LoginSelector).click();
+        Thread.sleep(1000);
+
+        // Open Window- Phase 2
+        selenium1.getElement(withdrawlSelector).click();
+        Thread.sleep(1000);
+        selenium1.getElement(amountBoxSelector).sendKeys(valueOf(withdrawalAmount));
+        Thread.sleep(1000);
+        selenium1.getElement(submitSelector).click();
+        Thread.sleep(1000);
+
+        // Test N Result
+        Thread.sleep(1000);
+        String actualError = selenium1.getElement(errorMessageSelector).getText();
+        Thread.sleep(1000);
+        Assert.assertEquals(expectedError, actualError);
+        selenium1.driver.quit();
+
+    }
+}
